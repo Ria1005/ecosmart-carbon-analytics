@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>EcoSmart | Carbon Analytics</title>
+
+    <style>
+
+        /* =========================
+           GLOBAL STYLES
+        ========================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background:
+                radial-gradient(circle at top left, #164e63, transparent 30%),
+                radial-gradient(circle at bottom right, #14532d, transparent 30%),
+                #020617;
+
+            color: white;
+            min-height: 100vh;
+        }
+
+
+        /* =========================
+           NAVBAR
+        ========================== */
+
+        .navbar {
+            height: 75px;
+            padding: 0 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(15px);
+
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #86efac;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 15px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #86efac;
+        }
+
+
+        /* =========================
+           HERO SECTION
+        ========================== */
+
+        .hero {
+            text-align: center;
+            padding: 70px 20px 40px;
+        }
+
+        .hero h1 {
+            font-size: clamp(32px, 5vw, 58px);
+            margin-bottom: 15px;
+
+            background: linear-gradient(
+                90deg,
+                #86efac,
+                #22c55e,
+                #a7f3d0
+            );
+
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            color: #cbd5e1;
+            font-size: 18px;
+            max-width: 700px;
+            margin: auto;
+            line-height: 1.6;
+        }
+
+
+        /* =========================
+           STATISTICS CARDS
+        ========================== */
+
+        <section class="stats-container">
+        ...
+    </section>
+
+            
+
+       
+
+
+        /* =========================
+           DASHBOARD SECTION
+        ========================== */
+
+        .dashboard-section {
+            max-width: 1400px;
+            margin: auto;
+            padding: 0 25px;
+        }
+
+        .section-heading {
+            margin-bottom: 20px;
+        }
+
+        .section-heading h2 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .section-heading p {
+            color: #94a3b8;
+        }
+
+        .dashboard-container {
+            width: 100%;
+
+            border-radius: 20px;
+
+            overflow: hidden;
+
+            background: rgba(255, 255, 255, 0.08);
+
+            backdrop-filter: blur(15px);
+
+            border: 1px solid rgba(255, 255, 255, 0.15);
+
+            box-shadow:
+                0 20px 50px rgba(0, 0, 0, 0.5),
+                0 0 30px rgba(34, 197, 94, 0.1);
+
+            transition: 0.3s;
+        }
+
+        .dashboard-container:hover {
+            box-shadow:
+                0 25px 60px rgba(0, 0, 0, 0.6),
+                0 0 40px rgba(34, 197, 94, 0.2);
+        }
+
+        iframe {
+            width: 100%;
+            height: 750px;
+            border: none;
+            display: block;
+        }
+
+
+        /* =========================
+           INSIGHTS SECTION
+        ========================== */
+
+        .insights-section {
+            max-width: 1300px;
+            margin: 70px auto;
+
+            padding: 0 25px;
+        }
+
+        .insights-section h2 {
+            font-size: 30px;
+            margin-bottom: 25px;
+        }
+
+        .insights-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .insight-card {
+            padding: 25px;
+
+            background: rgba(255, 255, 255, 0.06);
+
+            border-radius: 18px;
+
+            border: 1px solid rgba(255, 255, 255, 0.1);
+
+            transition: 0.3s;
+        }
+
+        .insight-card:hover {
+            transform: scale(1.03);
+
+            background: rgba(34, 197, 94, 0.1);
+        }
+
+        .insight-card h3 {
+            margin-bottom: 12px;
+            color: #86efac;
+        }
+
+        .insight-card p {
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================== */
+
+        footer {
+            text-align: center;
+
+            padding: 30px;
+
+            color: #94a3b8;
+
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+            margin-top: 50px;
+        }
+
+
+        /* =========================
+           RESPONSIVE DESIGN
+        ========================== */
+
+        @media (max-width: 900px) {
+
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .insights-container {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .navbar {
+                padding: 0 20px;
+            }
+
+            .nav-links {
+                gap: 12px;
+            }
+
+            .nav-links a {
+                font-size: 12px;
+            }
+
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+
+            iframe {
+                height: 600px;
+            }
+
+            .hero {
+                padding-top: 45px;
+            }
+
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         NAVIGATION BAR
+    ========================== -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            🌱 EcoSmart
+        </div>
+
+        <div class="nav-links">
+
+            <a href="#dashboard">
+                Dashboard
+            </a>
+
+            <a href="#insights">
+                Insights
+            </a>
+
+            <a href="#about">
+                About
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- =========================
+         HERO SECTION
+    ========================== -->
+
+    <section class="hero">
+
+        <h1>
+            Carbon Footprint Analytics
+        </h1>
+
+        <p>
+            Explore lifestyle patterns, transportation choices,
+            dietary habits, and their impact on carbon emissions.
+        </p>
+
+    </section>
+
+
+    <!-- =========================
+         STATISTICS CARDS
+    ========================== -->
+
+   <section class="stats-container">
+        ...
+    </section>
+    <!-- =========================
+         POWER BI DASHBOARD
+    ========================== -->
+
+    <section
+        class="dashboard-section"
+        id="dashboard"
+    >
+
+        <div class="section-heading">
+
+            <h2>
+                📊 Interactive Analytics Dashboard
+            </h2>
+
+            <p>
+                Use the filters and visualizations below to explore carbon emission patterns.
+            </p>
+
+        </div>
+
+
+        <div class="dashboard-container">
+
+            <iframe
+                title="CARBON EMISSION"
+                src="https://app.powerbi.com/reportEmbed?reportId=6d2163f5-07e6-4a58-8d37-a60afbb14462&autoAuth=true&ctid=5349a4dc-a350-45ff-b7b5-ffbd5c5fc573"
+                allowFullScreen="true"
+            >
+            </iframe>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         INSIGHTS SECTION
+    ========================== -->
+
+    <section
+        class="insights-section"
+        id="insights"
+    >
+
+        <h2>
+            🌿 Sustainability Insights
+        </h2>
+
+
+        <div class="insights-container">
+
+
+            <div class="insight-card">
+
+                <h3>
+                    🚗 Transportation Impact
+                </h3>
+
+                <p>
+                    Transportation choices significantly influence carbon emissions.
+                    Public transport, walking, and cycling can help reduce individual emissions.
+                </p>
+
+            </div>
+
+
+            <div class="insight-card">
+
+                <h3>
+                    🥗 Dietary Choices
+                </h3>
+
+                <p>
+                    Different dietary patterns contribute differently to carbon emissions.
+                    Understanding these patterns can support more sustainable lifestyle choices.
+                </p>
+
+            </div>
+
+
+            <div class="insight-card">
+
+                <h3>
+                    ⚡ Energy Efficiency
+                </h3>
+
+                <p>
+                    Improving energy efficiency and adopting sustainable practices can
+                    contribute to reducing overall environmental impact.
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         ABOUT SECTION
+    ========================== -->
+
+    <section
+        class="insights-section"
+        id="about"
+    >
+
+        <h2>
+            🌎 About EcoSmart
+        </h2>
+
+        <p style="color: #cbd5e1; line-height: 1.8; max-width: 900px;">
+
+            EcoSmart is a carbon footprint analytics platform designed to
+            analyze how lifestyle factors such as diet, transportation,
+            body type, recycling habits, and energy efficiency contribute
+            to carbon emissions.
+
+        </p>
+
+    </section>
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+
+    <footer>
+
+        🌱 EcoSmart Carbon Analytics
+
+        <br>
+
+        Building a more sustainable future through data.
+
+    </footer>
+
+
+</body>
+
+</html>

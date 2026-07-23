@@ -110,19 +110,6 @@
 
 
         /* =========================
-           STATISTICS CARDS
-        ========================== */
-
-        <section class="stats-container">
-        ...
-    </section>
-
-            
-
-       
-
-
-        /* =========================
            DASHBOARD SECTION
         ========================== */
 
@@ -147,15 +134,10 @@
 
         .dashboard-container {
             width: 100%;
-
             border-radius: 20px;
-
             overflow: hidden;
-
             background: rgba(255, 255, 255, 0.08);
-
             backdrop-filter: blur(15px);
-
             border: 1px solid rgba(255, 255, 255, 0.15);
 
             box-shadow:
@@ -173,7 +155,7 @@
 
         iframe {
             width: 100%;
-            height: 750px;
+            height: 850px;
             border: none;
             display: block;
         }
@@ -186,7 +168,6 @@
         .insights-section {
             max-width: 1300px;
             margin: 70px auto;
-
             padding: 0 25px;
         }
 
@@ -203,19 +184,14 @@
 
         .insight-card {
             padding: 25px;
-
             background: rgba(255, 255, 255, 0.06);
-
             border-radius: 18px;
-
             border: 1px solid rgba(255, 255, 255, 0.1);
-
             transition: 0.3s;
         }
 
         .insight-card:hover {
             transform: scale(1.03);
-
             background: rgba(34, 197, 94, 0.1);
         }
 
@@ -236,13 +212,9 @@
 
         footer {
             text-align: center;
-
             padding: 30px;
-
             color: #94a3b8;
-
             border-top: 1px solid rgba(255, 255, 255, 0.1);
-
             margin-top: 50px;
         }
 
@@ -252,10 +224,6 @@
         ========================== */
 
         @media (max-width: 900px) {
-
-            .stats-container {
-                grid-template-columns: repeat(2, 1fr);
-            }
 
             .insights-container {
                 grid-template-columns: 1fr;
@@ -278,10 +246,6 @@
                 font-size: 12px;
             }
 
-            .stats-container {
-                grid-template-columns: 1fr;
-            }
-
             iframe {
                 height: 600px;
             }
@@ -297,7 +261,6 @@
 
 
 <body>
-
 
     <!-- =========================
          NAVIGATION BAR
@@ -347,45 +310,23 @@
 
 
     <!-- =========================
-         STATISTICS CARDS
-    ========================== -->
-
-   <section class="stats-container">
-        ...
-    </section>
-    <!-- =========================
          POWER BI DASHBOARD
     ========================== -->
 
-    <section
-        class="dashboard-section"
-        id="dashboard"
-    >
-
+    <section class="dashboard-section" id="dashboard">
         <div class="section-heading">
-
-            <h2>
-                📊 Interactive Analytics Dashboard
-            </h2>
-
-            <p>
-                Use the filters and visualizations below to explore carbon emission patterns.
-            </p>
-
+            <h2>📊 Interactive Analytics Dashboard</h2>
+            <p>Use the filters and visualizations below to explore carbon emission patterns.</p>
         </div>
 
-
         <div class="dashboard-container">
-
             <iframe
                 title="CARBON EMISSION"
-                src="https://app.powerbi.com/reportEmbed?reportId=6d2163f5-07e6-4a58-8d37-a60afbb14462&autoAuth=true&ctid=5349a4dc-a350-45ff-b7b5-ffbd5c5fc573"
+                src="https://app.powerbi.com/reportEmbed?reportId=6d2163f5-07e6-4a58-8d37-a60afbb14462&autoAuth=true&ctid=5349a4dc-a350-45ff-b7b5-ffbd5c5fc573&navContentPaneEnabled=false"
                 allowFullScreen="true"
             >
             </iframe>
-
         </div>
-
     </section>
 
 
@@ -393,60 +334,43 @@
          INSIGHTS SECTION
     ========================== -->
 
-    <section
-        class="insights-section"
-        id="insights"
-    >
+    <section class="insights-section" id="insights">
 
         <h2>
             🌿 Sustainability Insights
         </h2>
 
-
         <div class="insights-container">
 
-
             <div class="insight-card">
-
                 <h3>
                     🚗 Transportation Impact
                 </h3>
-
                 <p>
                     Transportation choices significantly influence carbon emissions.
                     Public transport, walking, and cycling can help reduce individual emissions.
                 </p>
-
             </div>
 
-
             <div class="insight-card">
-
                 <h3>
                     🥗 Dietary Choices
                 </h3>
-
                 <p>
                     Different dietary patterns contribute differently to carbon emissions.
                     Understanding these patterns can support more sustainable lifestyle choices.
                 </p>
-
             </div>
 
-
             <div class="insight-card">
-
                 <h3>
                     ⚡ Energy Efficiency
                 </h3>
-
                 <p>
                     Improving energy efficiency and adopting sustainable practices can
                     contribute to reducing overall environmental impact.
                 </p>
-
             </div>
-
 
         </div>
 
@@ -457,22 +381,17 @@
          ABOUT SECTION
     ========================== -->
 
-    <section
-        class="insights-section"
-        id="about"
-    >
+    <section class="insights-section" id="about">
 
         <h2>
             🌎 About EcoSmart
         </h2>
 
         <p style="color: #cbd5e1; line-height: 1.8; max-width: 900px;">
-
             EcoSmart is a carbon footprint analytics platform designed to
             analyze how lifestyle factors such as diet, transportation,
             body type, recycling habits, and energy efficiency contribute
             to carbon emissions.
-
         </p>
 
     </section>
@@ -483,15 +402,10 @@
     ========================== -->
 
     <footer>
-
         🌱 EcoSmart Carbon Analytics
-
         <br>
-
         Building a more sustainable future through data.
-
     </footer>
-
 
 </body>
 

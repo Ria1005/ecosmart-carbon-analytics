@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Insights — EcoSmart</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar" id="sidebar-slot"></aside>
+
+  <main>
+    <div class="page-kicker">MODEL — WHAT THE AI LEARNED</div>
+    <h1 class="page-title">Not just a black box.</h1>
+    <p class="page-lede">The prediction model was trained on the survey data. This page shows how accurate it is, and which habits it leaned on most to make its predictions.</p>
+
+    <div class="stat-line" id="metricRow"></div>
+
+    <div class="panel" style="margin-top:30px;">
+      <div class="chart-wrap"><canvas id="importanceChart"></canvas></div>
+      <div class="side-detail" id="detailBox">
+        <h3>How to read this</h3>
+        <p>Each bar is how much weight the model placed on that factor when predicting
+        someone's carbon emission. Longer bar = bigger influence on the prediction.</p>
+        <div id="fallbackSlot"></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="{{ url_for('static', filename='nav.js') }}"></script>
+<script src="{{ url_for('static', filename='data.js') }}"></script>
+<script>
+renderSidebar('insights');
+
+document.addEventListener('ecosmart-data-ready', () => {
+  const d = window.EcoSmart.data;
+  const m = d.model_metrics || {};
+
+  document.getElementById('metricRow').innerHTML = `
+    <div><div class="num">${m.r2 ?? '\u2014'}</div><div class="lbl">R\u00b2 (accuracy)</div></div>
+    <div><div class="num">${m.rmse ?? '\u2014'}</div><div class="lbl">RMSE</div></div>
+    <div><div class="num">${m.mae ?? '\u2014'}</div><div class="lbl">MAE</div></div>
+  `;
+
+  const entries = Object.entries(d.feature_importance || {}).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const labels = entries.map(e=>e[0]);
+  const values = entries.map(e=>e[1]);
+
+  const ctx = document.getElementById('importanceChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: { labels, datasets:[{ data: values, backgroundColor: window.EcoSmart.palette }] },
+    options: {
+      indexAxis:'y',
+      plugins:{ legend:{ display:false } },
+      scales: {
+        x:{ ticks:{ color:'#9FB0A5' }, grid:{ color:'rgba(237,234,224,0.06)' } },
+        y:{ ticks:{ color:'#9FB0A5' }, grid:{ color:'rgba(237,234,224,0.06)' } }
+      },
+      maintainAspectRatio:false
+    }
+  });
+
+  document.getElementById('fallbackSlot').innerHTML = window.EcoSmart.fallbackNote();
+});
+</script>
+</body>
+</html>

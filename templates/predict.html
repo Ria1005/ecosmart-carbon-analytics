@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Predict Yours — EcoSmart</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+<style>
+  .form-grid{ display:grid; gap:16px; max-width:420px; margin-bottom:30px; }
+  label{ font-size:13px; color:var(--ink-muted); display:block; margin-bottom:6px; }
+  select, input{
+    width:100%; padding:10px 12px; background:var(--bg-panel);
+    border:1px solid var(--line); border-radius:6px; color:var(--ink); font-size:14.5px;
+  }
+  button{
+    padding:11px 20px; background:var(--moss); color:#16231F; border:none;
+    border-radius:6px; font-weight:600; cursor:pointer; font-size:14.5px;
+  }
+  button:hover{ background:#a0c197; }
+  #resultBox{
+    border:1px solid var(--line); background:var(--bg-panel); border-radius:10px;
+    padding:24px; max-width:420px; display:none;
+  }
+  #resultBox .num{ font-family:'Fraunces',serif; font-size:34px; color:var(--gold); }
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar" id="sidebar-slot"></aside>
+
+  <main>
+    <div class="page-kicker">TRY IT — ESTIMATE YOURS</div>
+    <h1 class="page-title">What's your footprint?</h1>
+    <p class="page-lede">A rough estimate based on the same survey averages shown elsewhere on this site. This is a client-side approximation — a server-side version using the full trained model is the next step.</p>
+
+    <form class="form-grid" id="predictForm">
+      <div>
+        <label>Transport</label>
+        <select id="transportSel"></select>
+      </div>
+      <div>
+        <label>Diet</label>
+        <select id="dietSel"></select>
+      </div>
+      <div>
+        <label>Materials recycled (count)</label>
+        <input type="number" id="recycleInput" min="0" max="6" value="1">
+      </div>
+      <button type="submit">Estimate my footprint</button>
+    </form>
+
+    <div id="resultBox">
+      <div class="lbl" style="color:var(--ink-muted); font-size:13px;">Estimated carbon emission</div>
+      <div class="num" id="resultValue">\u2014</div>
+      <p style="color:var(--ink-muted); font-size:14px; margin-top:10px;" id="resultNote"></p>
+    </div>
+
+    <div class="callout" style="max-width:420px; margin-top:24px;" id="fallbackSlot"></div>
+  </main>
+</div>
+
+<script src="{{ url_for('static', filename='nav.js') }}"></script>
+<script src="{{ url_for('static', filename='data.js') }}"></script>
+<script>
+renderSidebar('predict');
+
+document.addEventListener('ecosmart-data-ready', () => {
+  const d = window.EcoSmart.data;
+  const tSel = document.getElementById('transportSel');
+  const dSel = document.getElementById('dietSel');
+
+  Object.keys(d.transport_avg).forEach(t => tSel.innerHTML += `<option value="${t}">${t}</option>`);
+  d.diet_breakdown.forEach(r => dSel.innerHTML += `<option value="${r.Diet}">${r.Diet}</option>`);
+
+  document.getElementById('fallbackSlot').innerHTML = window.EcoSmart.fallbackNote() ||
+    `<span style="color:var(--ink-muted)">Estimate uses the averages from dashboard_data.json.</span>`;
+
+  document.getElementById('predictForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const t = tSel.value;
+    const diet = dSel.value;
+    const recycleCount = parseInt(document.getElementById('recycleInput').value || '0', 10);
+
+    const transportBase = d.transport_avg[t];
+    const dietRow = d.diet_breakdown.find(r => r.Diet === diet);
+    const dietBase = dietRow ? dietRow.average_emission : transportBase;
+
+    // Simple blended estimate: mostly transport-driven, adjusted by diet and recycling breadth.
+    const recyclingKeys = Object.keys(d.recycling_avg).map(Number);
+    const maxKey = Math.max(...recyclingKeys);
+    const cappedCount = Math.min(recycleCount, maxKey);
+    const recyclingBase = d.recycling_avg[String(cappedCount)] ?? d.recycling_avg[String(maxKey)];
+
+    const estimate = Math.round(0.5 * transportBase + 0.25 * dietBase + 0.25 * recyclingBase);
+
+    document.getElementById('resultBox').style.display = 'block';
+    document.getElementById('resultValue').textContent = estimate;
+    document.getElementById('resultNote').textContent =
+      `Based on ${t} transport, a ${diet} diet, and recycling ${recycleCount} material type(s).`;
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoSmart — Carbon Intelligence</title>
+  
+  <!-- Use the completely new design system for this page only -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+</head>
+<body>
+
+  <!-- FLOATING NAVIGATION -->
+  <nav class="nav-wrapper">
+    <div class="brand">Eco<span>Smart</span></div>
+    <div class="nav-links">
+      <a href="/" class="nav-link active">Home & Problem</a>
+      <a href="/transport" class="nav-link">Transport</a>
+      <a href="/recycling" class="nav-link">Recycling</a>
+      <a href="/insights" class="nav-link">AI Insights</a>
+      <a href="/predict" class="nav-link">Predict Yours</a>
+      <a href="/about" class="nav-link">About</a>
+    </div>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <section class="section hero-section">
+    <div class="container hero-grid">
+      
+      <div class="hero-content reveal">
+        <div class="eyebrow">EcoSmart / Carbon Intelligence</div>
+        <h1 class="hero-title">
+          Understand your footprint.
+          <span>Change what matters.</span>
+        </h1>
+        <div class="cta-group">
+          <a href="/transport" class="btn btn-primary">
+            Explore the Data
+            <span class="btn-icon">→</span>
+          </a>
+          <a href="/predict" class="btn btn-secondary">Estimate My Footprint</a>
+        </div>
+      </div>
+
+      <div class="hero-visual reveal delay-1">
+        <div class="ai-core">
+          EcoSmart AI
+        </div>
+        <a href="/transport" class="node node-1">
+          <span>Lifestyle Input</span>
+          <strong>TRANSPORT</strong>
+        </a>
+        <a href="/predict" class="node node-3">
+          <span>Final Insight</span>
+          <strong>CARBON FOOTPRINT</strong>
+        </a>
+        <a href="/insights" class="node node-4">
+          <span>Analyzing patterns</span>
+          <strong>AI MODEL</strong>
+        </a>
+      </div>
+      
+    </div>
+    
+    <div class="scroll-indicator">
+      <span class="scroll-text">Scroll to discover</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- THE BIG IDEA -->
+  <section class="section editorial-section reveal">
+    <div class="container">
+      <div class="eyebrow">Why EcoSmart Exists</div>
+      <h2 class="editorial-title">
+        Your footprint is personal.
+        <span>Understanding it shouldn't be complicated.</span>
+      </h2>
+    </div>
+  </section>
+
+  <!-- PROBLEM SECTION (THREE DIMENSIONS) -->
+  <section class="section problem-section">
+    <div class="container">
+      
+      <div class="problem-header reveal">
+        <div class="eyebrow">The Problem</div>
+        <h2>The numbers are there.<br>The patterns aren't obvious.</h2>
+        <p>EcoSmart explores survey data around transport, diet, recycling and related habits to understand which behaviors are associated with differences in carbon emissions.</p>
+      </div>
+
+      <div class="dimensions-grid">
+        <!-- TRANSPORT -->
+        <a href="/transport" class="dim-card transport reveal delay-1">
+          <div class="dim-visual vis-transport"></div>
+          <h3 class="dim-title">Transport</h3>
+          <p class="dim-desc">The most significant driver of personal emissions, strongly correlated with daily commute choices.</p>
+        </a>
+        
+
+        <!-- RECYCLING -->
+        <a href="/recycling" class="dim-card recycling reveal delay-3">
+          <div class="dim-visual vis-recycling"></div>
+          <h3 class="dim-title">Recycling</h3>
+          <p class="dim-desc">How recycling breadth affects the average footprint.</p>
+        </a>
+      </div>
+      
+    </div>
+  </section>
+
+  <!-- DATA ENGINE -->
+  <section class="section engine-section">
+    <div class="container">
+      <div class="eyebrow">Intelligence</div>
+      <h2 class="editorial-title reveal">
+        From everyday habits
+        <span>to meaningful insight.</span>
+      </h2>
+
+      <div class="pipeline-container reveal delay-1">
+        <div class="pipeline-line"></div>
+        <div class="pipeline-particle"></div>
+        
+        <div class="pipeline-step">
+          <h4>Habits</h4>
+          <span>Lifestyle</span>
+        </div>
+        
+        <div class="pipeline-step">
+          <h4>Data</h4>
+          <span>Telemetry</span>
+        </div>
+        
+        <div class="pipeline-step ai-step">
+          <h4>EcoSmart AI</h4>
+          <span>Analysis</span>
+        </div>
+        
+        <div class="pipeline-step">
+          <h4>Insight</h4>
+          <span>Carbon Impact</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCT PREVIEW -->
+  <section class="section preview-section reveal">
+    <div class="container" style="max-width: 900px;">
+      
+      <div class="preview-wrapper">
+        <div class="preview-dashboard">
+          
+          <div class="preview-header">
+            <div class="preview-title">EcoSmart Platform</div>
+            <div class="preview-tabs">
+              <a href="/transport" class="ptab active">Transport</a>
+              <a href="/recycling" class="ptab">Recycling</a>
+            </div>
+          </div>
+          
+          <div class="preview-main">
+            <!-- Abstract Dashboard Chart representation -->
+            <div class="faux-chart">
+              <div class="faux-bar fb-1"></div>
+              <div class="faux-bar fb-2"></div>
+              <div class="faux-bar fb-3"></div>
+              <div class="faux-bar fb-4"></div>
+              <div class="faux-bar fb-5"></div>
+            </div>
+          </div>
+          
+          <div style="color: var(--text-muted); font-size: 14px; text-align: center;">
+            Interactive Carbon Footprint Visualization
+          </div>
+          
+        </div>
+      </div>
+      
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="section cta-section reveal">
+    <div class="container">
+      <h2 class="editorial-title">Understand what matters.</h2>
+      <p style="color: var(--text-muted); max-width: 500px; margin: 0 auto 40px; font-size: 18px;">
+        Explore the data or estimate your own footprint with EcoSmart.
+      </p>
+      
+      <div class="cta-group">
+        <a href="/transport" class="btn btn-primary">
+          Explore the Data
+          <span class="btn-icon">→</span>
+        </a>
+        <a href="/predict" class="btn btn-secondary">Estimate My Footprint</a>
+      </div>
+    </div>
+  </section>
+
+  <script src="{{ url_for('static', filename='home.js') }}"></script>
+</body>
+</html>

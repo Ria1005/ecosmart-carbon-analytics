@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recycling — EcoSmart</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar" id="sidebar-slot"></aside>
+
+  <main>
+    <div class="page-kicker">FACTOR 03 — RECYCLING</div>
+    <h1 class="page-title">Breadth matters more than the habit itself.</h1>
+    <p class="page-lede">It's not just whether someone recycles — it's how many different materials they recycle. Emissions drop steadily as that count goes up.</p>
+
+    <div class="panel">
+      <div class="chart-wrap"><canvas id="recyclingChart"></canvas></div>
+      <div class="side-detail" id="detailBox">
+        <h3>Reading this chart</h3>
+        <p>Each point is the average carbon emission for people recycling that many
+        material types (paper, plastic, glass, metal, etc.). The steady downward slope
+        is the signal: <strong>breadth</strong>, not just participation, is what correlates
+        with lower emissions.</p>
+        <div id="fallbackSlot"></div>
+      </div>
+    </div>
+
+    <table id="recycleTable">
+      <thead><tr><th>Materials recycled</th><th>Average emission</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </main>
+</div>
+
+<script src="{{ url_for('static', filename='nav.js') }}"></script>
+<script src="{{ url_for('static', filename='data.js') }}"></script>
+<script>
+renderSidebar('recycling');
+
+document.addEventListener('ecosmart-data-ready', () => {
+  const data = window.EcoSmart.data.recycling_avg;
+  const labels = Object.keys(data);
+  const values = Object.values(data);
+
+  const ctx = document.getElementById('recyclingChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: { labels, datasets: [{
+      data: values, borderColor:'#8FAE86', backgroundColor:'rgba(143,174,134,0.15)',
+      tension:0.35, fill:true, pointBackgroundColor:'#D9B369', pointRadius:5
+    }]},
+    options: {
+      plugins:{ legend:{ display:false } },
+      scales: {
+        x:{ title:{ display:true, text:'Number of materials recycled', color:'#9FB0A5' }, ticks:{ color:'#9FB0A5' }, grid:{ color:'rgba(237,234,224,0.06)' } },
+        y:{ ticks:{ color:'#9FB0A5' }, grid:{ color:'rgba(237,234,224,0.06)' } }
+      },
+      maintainAspectRatio:false
+    }
+  });
+
+  document.querySelector('#recycleTable tbody').innerHTML =
+    labels.map((l,i) => `<tr><td>${l}</td><td>${values[i]}</td></tr>`).join('');
+
+  document.getElementById('fallbackSlot').innerHTML = window.EcoSmart.fallbackNote();
+});
+</script>
+</body>
+</html>

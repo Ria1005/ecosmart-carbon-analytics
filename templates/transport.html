@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transport — EcoSmart</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='transport.css') }}">
+</head>
+<body>
+
+  <!-- FLOATING NAVIGATION -->
+  <nav class="nav-wrapper">
+    <div class="brand">Eco<span>Smart</span></div>
+    <div class="nav-links">
+      <a href="/" class="nav-link">Home & Problem</a>
+      <a href="/transport" class="nav-link active">Transport</a>
+      <a href="/recycling" class="nav-link">Recycling</a>
+      <a href="/insights" class="nav-link">AI Insights</a>
+      <a href="/predict" class="nav-link">Predict Yours</a>
+      <a href="/about" class="nav-link">About</a>
+    </div>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <section class="section hero-section">
+    <div class="container hero-grid">
+      
+      <div class="hero-content reveal">
+        <div class="eyebrow">Factor 01 / Transport</div>
+        <h1 class="hero-title">
+          How you move
+          <span>shapes the footprint.</span>
+        </h1>
+        <p class="hero-desc">
+          EcoSmart analyzes transportation modes and their relationship with carbon emissions. Explore the dataset averages below.
+        </p>
+      </div>
+
+      <div class="hero-visual reveal delay-1">
+        <div class="chart-container">
+          <div class="orbit-ring"></div>
+          
+          <svg class="chart-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background track (optional) -->
+            <circle cx="50" cy="50" r="15.9155" fill="none" stroke="rgba(255,255,255,0.02)" stroke-width="24" />
+            
+            <!-- Data segments (rendered via JS) -->
+            <circle class="chart-segment seg-private" cx="50" cy="50" r="15.9155" stroke-dasharray="0 100" stroke-dashoffset="0" />
+            <circle class="chart-segment seg-public" cx="50" cy="50" r="15.9155" stroke-dasharray="0 100" stroke-dashoffset="0" />
+            <circle class="chart-segment seg-walk" cx="50" cy="50" r="15.9155" stroke-dasharray="0 100" stroke-dashoffset="0" />
+          </svg>
+
+          <div class="chart-center">
+            <h3 id="chartCenterTitle">Transport</h3>
+            <div class="main-val" id="chartCenterVal">--</div>
+            <div class="sub-val" id="chartCenterDesc">Total Emissions</div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </section>
+
+  <!-- COMPARISON SECTION -->
+  <section class="section comparison-section reveal">
+    <div class="container" style="max-width: 900px;">
+      <div class="comp-grid">
+        
+        <!-- PRIVATE -->
+        <div class="comp-row private">
+          <div class="comp-label">Private</div>
+          <div class="comp-bar-container">
+            <div class="comp-bar"></div>
+          </div>
+          <!-- Data value attribute for JS number counter -->
+          <div class="comp-value" data-value="2980.88">0.00</div>
+        </div>
+        
+        <!-- PUBLIC -->
+        <div class="comp-row public delay-1">
+          <div class="comp-label">Public</div>
+          <div class="comp-bar-container">
+            <div class="comp-bar"></div>
+          </div>
+          <div class="comp-value" data-value="1965.79">0.00</div>
+        </div>
+        
+        <!-- WALK/BICYCLE -->
+        <div class="comp-row walk delay-2">
+          <div class="comp-label">Walk / Bicycle</div>
+          <div class="comp-bar-container">
+            <div class="comp-bar"></div>
+          </div>
+          <div class="comp-value" data-value="1879.74">0.00</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- KEY FINDING SECTION -->
+  <section class="section finding-section reveal">
+    <div class="container">
+      <div class="finding-box">
+        
+        <div class="finding-content">
+          <div class="eyebrow">Key Finding</div>
+          <div class="finding-number">0.59</div>
+          <p class="finding-desc">
+            The dataset shows a correlation of r = 0.59 between transport mode and emissions — the strongest single factor in the survey.
+          </p>
+        </div>
+        
+        <div class="connection-visual">
+          <div class="conn-node">Transport</div>
+          <div class="conn-line"></div>
+          <div class="conn-particle"></div>
+          <div class="conn-node" style="border-color: var(--accent); color: var(--accent);">Emissions</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- DRILL-DOWN DATA EXPLORER -->
+  <section class="section explorer-section">
+    <div class="container">
+      
+      <div class="explorer-header reveal">
+        <div class="eyebrow">Drill-Down</div>
+        <h2>Explore the data.</h2>
+      </div>
+
+      <div class="explorer-path reveal delay-1">
+        <div class="path-line"></div>
+        
+        <div class="path-node active">
+          <h4>Mode</h4>
+          <div class="icon">🚗</div>
+        </div>
+        
+        <div class="path-node locked">
+          <h4>Region</h4>
+          <div class="icon">🔒</div>
+        </div>
+        
+        <div class="path-node locked">
+          <h4>Country</h4>
+          <div class="icon">🔒</div>
+        </div>
+        
+        <div class="path-node locked">
+          <h4>City</h4>
+          <div class="icon">🔒</div>
+        </div>
+      </div>
+      
+      <div class="explorer-note reveal delay-2">
+        Location-level drill-down requires a location field in the survey dataset. 
+        Next data-collection step: add a location field to unlock the region, country, and city layers.
+      </div>
+      
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="section cta-section reveal">
+    <div class="container">
+      <h2 style="font-family: var(--font-display); font-size: 3rem; margin-bottom: 32px;">There's more in the data.</h2>
+      
+      <div style="display: flex; gap: 24px; justify-content: center;">
+        <a href="/recycling" class="btn btn-secondary">
+          Explore Recycling
+          <span class="btn-icon">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Load data pipeline and interactions -->
+  <script src="{{ url_for('static', filename='data.js') }}"></script>
+  <script src="{{ url_for('static', filename='transport.js') }}"></script>
+</body>
+</html>

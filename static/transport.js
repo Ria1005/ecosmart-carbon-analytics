@@ -174,29 +174,44 @@ document.addEventListener('ecosmart-data-ready', () => {
   const drillGrid = document.getElementById('drillCardsGrid');
 
   let currentDrillLevel = 'mode';
+  let drillMode = null;
+  let drillBand = null;
 
   function renderDrillDown(level) {
+    // Reroute breadcrumb clicks based on active mode
+    if (level === 'vehicle') {
+      if (drillMode === 'public') level = 'public-distance';
+      if (drillMode === 'walk/bicycle') level = 'walk-distance';
+    }
+    if (level === 'distance') {
+      if (drillMode === 'public' || drillMode === 'walk/bicycle') level = 'details';
+    }
+
     currentDrillLevel = level;
 
-    // Update active tab styling
     document.querySelectorAll('.breadcrumb-step').forEach(btn => {
-      btn.classList.toggle('active', btn.getAttribute('data-level') === level);
+      const btnLevel = btn.getAttribute('data-level');
+      let isActive = false;
+      if (btnLevel === level) isActive = true;
+      if (btnLevel === 'vehicle' && (level === 'public-distance' || level === 'walk-distance')) isActive = true;
+      if (btnLevel === 'distance' && level === 'details') isActive = true;
+      btn.classList.toggle('active', isActive);
     });
 
     if (level === 'mode') {
       drillTitle.textContent = 'Level 1: Transport Mode Overview';
-      drillDesc.textContent = 'Click "Private Car" or the tabs above to drill deeper';
+      drillDesc.textContent = 'Click any mode or the tabs above to drill deeper';
       
       const modes = [
-        { key: 'private', name: 'Private Car', avg: valPrivate, count: 3279, desc: 'Highest overall category. Leads into vehicle fuel breakdown.', drillable: true },
-        { key: 'public', name: 'Public Transit', avg: valPublic, count: 3374, desc: 'Buses, trains, and shared commuting networks.', drillable: false },
-        { key: 'walk/bicycle', name: 'Walk / Bicycle', avg: valWalk, count: 3347, desc: 'Zero direct fuel consumption baseline.', drillable: false }
+        { key: 'private', name: 'Private Car', avg: valPrivate, count: 3279, desc: 'Highest overall category. Leads into vehicle fuel breakdown.', drillable: true, goto: 'vehicle', cta: 'Click to drill into Vehicle Powertrain' },
+        { key: 'public', name: 'Public Transit', avg: valPublic, count: 3374, desc: 'Buses, trains, and shared commuting networks.', drillable: true, goto: 'public-distance', cta: 'Click for distance breakdown' },
+        { key: 'walk/bicycle', name: 'Walk / Bicycle', avg: valWalk, count: 3347, desc: 'Zero direct fuel consumption baseline.', drillable: true, goto: 'walk-distance', cta: 'Click for distance breakdown' }
       ];
 
       const maxModeAvg = Math.max(...modes.map(m => m.avg));
 
       drillGrid.innerHTML = modes.map(m => `
-        <div class="drill-card ${m.drillable ? 'highlight' : ''}" data-goto="${m.drillable ? 'vehicle' : ''}">
+        <div class="drill-card ${m.drillable ? 'highlight' : ''}" data-goto="${m.goto || ''}" data-mode="${m.key}">
           <div class="drill-card-top">
             <span class="drill-card-title">${m.name}</span>
             <span class="drill-card-val">${m.avg.toFixed(1)} <small style="font-size:11px; color:var(--text-muted);">kg</small></span>
@@ -205,7 +220,7 @@ document.addEventListener('ecosmart-data-ready', () => {
           <div class="drill-bar-wrap">
             <div class="drill-bar-fill" style="width: ${(m.avg / maxModeAvg) * 100}%;"></div>
           </div>
-          ${m.drillable ? `<div style="margin-top:12px; font-size:12px; color:var(--accent); font-weight:600;">&darr; Click to drill into Vehicle Powertrain</div>` : ''}
+          ${m.drillable ? `<div style="margin-top:12px; font-size:12px; color:var(--accent); font-weight:600;">&darr; ${m.cta}</div>` : ''}
         </div>
       `).join('');
     } else if (level === 'vehicle') {
@@ -251,7 +266,7 @@ document.addEventListener('ecosmart-data-ready', () => {
       const maxDistAvg = Math.max(...entries.map(e => e[1].average));
 
       drillGrid.innerHTML = entries.map(([band, info]) => `
-        <div class="drill-card">
+        <div class="drill-card highlight" data-goto="details" data-band="${band}">
           <div class="drill-card-top">
             <span class="drill-card-title">${band}</span>
             <span class="drill-card-val">${info.average.toFixed(1)} <small style="font-size:11px; color:var(--text-muted);">kg</small></span>
@@ -260,14 +275,131 @@ document.addEventListener('ecosmart-data-ready', () => {
           <div class="drill-bar-wrap">
             <div class="drill-bar-fill" style="width: ${(info.average / maxDistAvg) * 100}%; background: var(--accent-secondary);"></div>
           </div>
+          <div style="margin-top:12px; font-size:12px; color:var(--accent); font-weight:600;">&darr; Click for deeper breakdown</div>
         </div>
       `).join('');
+    } else if (level === 'public-distance') {
+      drillTitle.textContent = 'Level 2: Monthly Distance Bands (Public Transit)';
+      drillDesc.textContent = 'Shows how public transit distance correlates with emissions. Click to drill deeper.';
+
+      const distData = {
+        "0-500 km": { average: 1933.6, count: 811 },
+        "501-1500 km": { average: 1976.9, count: 1602 },
+        "1501-3000 km": { average: 1975.1, count: 881 }
+      };
+
+      const entries = Object.entries(distData);
+      const maxDistAvg = Math.max(...entries.map(e => e[1].average));
+
+      drillGrid.innerHTML = entries.map(([band, info]) => `
+        <div class="drill-card highlight" data-goto="details" data-band="${band}">
+          <div class="drill-card-top">
+            <span class="drill-card-title">${band}</span>
+            <span class="drill-card-val">${info.average.toFixed(1)} <small style="font-size:11px; color:var(--text-muted);">kg</small></span>
+          </div>
+          <div class="drill-card-sub">${info.count.toLocaleString()} commuters in survey sample</div>
+          <div class="drill-bar-wrap">
+            <div class="drill-bar-fill" style="width: ${(info.average / maxDistAvg) * 100}%; background: var(--accent-secondary);"></div>
+          </div>
+          <div style="margin-top:12px; font-size:12px; color:var(--accent); font-weight:600;">&darr; Click for deeper breakdown</div>
+        </div>
+      `).join('');
+    } else if (level === 'walk-distance') {
+      drillTitle.textContent = 'Level 2: Monthly Distance Bands (Walk / Bicycle)';
+      drillDesc.textContent = 'All walk/bicycle commuters fall into the lowest distance band. Click to drill deeper.';
+
+      const distData = {
+        "0-500 km": { average: 1879.7, count: 3427 }
+      };
+
+      const entries = Object.entries(distData);
+      const maxDistAvg = Math.max(...entries.map(e => e[1].average));
+
+      drillGrid.innerHTML = entries.map(([band, info]) => `
+        <div class="drill-card highlight" data-goto="details" data-band="${band}">
+          <div class="drill-card-top">
+            <span class="drill-card-title">${band}</span>
+            <span class="drill-card-val">${info.average.toFixed(1)} <small style="font-size:11px; color:var(--text-muted);">kg</small></span>
+          </div>
+          <div class="drill-card-sub">${info.count.toLocaleString()} commuters in survey sample</div>
+          <div class="drill-bar-wrap">
+            <div class="drill-bar-fill" style="width: ${(info.average / maxDistAvg) * 100}%; background: var(--accent-secondary);"></div>
+          </div>
+          <div style="margin-top:12px; font-size:12px; color:var(--accent); font-weight:600;">&darr; Click for deeper breakdown</div>
+        </div>
+      `).join('');
+    } else if (level === 'details') {
+      drillTitle.textContent = 'Level 3: Deep Drill-Down: Distance Band Details';
+      drillDesc.textContent = 'Actual available statistics from the existing dataset for the selected mode and distance band.';
+      
+      const allStats = {
+        "private": {
+          "0-500 km": { "count": 156, "mean": 1906.7, "median": 1802.5, "min": 572, "max": 3670 },
+          "501-1500 km": { "count": 297, "mean": 2155.0, "median": 2124.0, "min": 735, "max": 4421 },
+          "1501-3000 km": { "count": 497, "mean": 2376.8, "median": 2322.0, "min": 794, "max": 5150 },
+          "3000+ km": { "count": 2329, "mean": 3287.0, "median": 3234.0, "min": 511, "max": 8377 }
+        },
+        "public": {
+          "0-500 km": { "count": 811, "mean": 1933.6, "median": 1880.0, "min": 495, "max": 4149 },
+          "501-1500 km": { "count": 1602, "mean": 1977.0, "median": 1895.5, "min": 440, "max": 4542 },
+          "1501-3000 km": { "count": 881, "mean": 1975.1, "median": 1881.0, "min": 533, "max": 4113 }
+        },
+        "walk/bicycle": {
+          "0-500 km": { "count": 3427, "mean": 1879.7, "median": 1799.0, "min": 306, "max": 4415 }
+        }
+      };
+
+      const stats = (drillMode && drillBand && allStats[drillMode] && allStats[drillMode][drillBand]) ? allStats[drillMode][drillBand] : null;
+
+      if (!stats) {
+        drillGrid.innerHTML = `
+          <div style="padding: 40px; text-align: center; color: var(--text-muted); background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; grid-column: 1 / -1;">
+            No statistics available for this selection.
+          </div>
+        `;
+      } else {
+        const modeLabel = drillMode === 'private' ? 'Private Car' : (drillMode === 'public' ? 'Public Transit' : 'Walk / Bicycle');
+        drillGrid.innerHTML = `
+          <div style="grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+            <div class="drill-card" style="border-color: var(--accent);">
+              <div class="drill-card-top"><span class="drill-card-title">Transport Mode</span></div>
+              <div style="font-family: var(--font-display); font-size: 24px; color: var(--accent); margin-top: 8px;">${modeLabel}</div>
+            </div>
+            <div class="drill-card">
+              <div class="drill-card-top"><span class="drill-card-title">Distance Band</span></div>
+              <div style="font-family: var(--font-display); font-size: 24px; color: var(--text-main); margin-top: 8px;">${drillBand}</div>
+            </div>
+            <div class="drill-card">
+              <div class="drill-card-top"><span class="drill-card-title">Number of Records</span></div>
+              <div style="font-family: var(--font-display); font-size: 24px; color: var(--accent-secondary); margin-top: 8px;">${stats.count.toLocaleString()}</div>
+            </div>
+            <div class="drill-card">
+              <div class="drill-card-top"><span class="drill-card-title">Average Emission</span></div>
+              <div style="font-family: var(--font-display); font-size: 24px; color: var(--text-main); margin-top: 8px;">${stats.mean.toFixed(1)} <small style="font-size:14px; color:var(--text-muted);">kg</small></div>
+            </div>
+            <div class="drill-card">
+              <div class="drill-card-top"><span class="drill-card-title">Median Emission</span></div>
+              <div style="font-family: var(--font-display); font-size: 24px; color: var(--text-main); margin-top: 8px;">${stats.median.toFixed(1)} <small style="font-size:14px; color:var(--text-muted);">kg</small></div>
+            </div>
+            <div class="drill-card">
+              <div class="drill-card-top"><span class="drill-card-title">Min Emission</span></div>
+              <div style="font-family: var(--font-display); font-size: 24px; color: var(--text-main); margin-top: 8px;">${stats.min.toFixed(1)} <small style="font-size:14px; color:var(--text-muted);">kg</small></div>
+            </div>
+            <div class="drill-card">
+              <div class="drill-card-top"><span class="drill-card-title">Max Emission</span></div>
+              <div style="font-family: var(--font-display); font-size: 24px; color: var(--text-main); margin-top: 8px;">${stats.max.toFixed(1)} <small style="font-size:14px; color:var(--text-muted);">kg</small></div>
+            </div>
+          </div>
+        `;
+      }
     }
 
     // Attach click listeners to drill cards
     drillGrid.querySelectorAll('.drill-card[data-goto]').forEach(card => {
       card.addEventListener('click', () => {
         const nextLevel = card.getAttribute('data-goto');
+        if (card.getAttribute('data-mode')) drillMode = card.getAttribute('data-mode');
+        if (card.getAttribute('data-band')) drillBand = card.getAttribute('data-band');
         if (nextLevel) renderDrillDown(nextLevel);
       });
     });

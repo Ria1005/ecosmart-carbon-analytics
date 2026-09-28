@@ -98,13 +98,13 @@ document.addEventListener('ecosmart-data-ready', () => {
   if (segPublic) {
     segPublic.style.strokeDashoffset = 100 - pctPrivate;
     segPublic.style.strokeDasharray = `0 100`;
-    setTimeout(() => { segPublic.style.strokeDasharray = `${pctPublic - gap} 100`; }, 250);
+    setTimeout(() => { segPublic.style.strokeDasharray = `${pctPublic - gap} 100`; }, 100);
   }
 
   if (segWalk) {
     segWalk.style.strokeDashoffset = 100 - (pctPrivate + pctPublic);
     segWalk.style.strokeDasharray = `0 100`;
-    setTimeout(() => { segWalk.style.strokeDasharray = `${pctWalk - gap} 100`; }, 400);
+    setTimeout(() => { segWalk.style.strokeDasharray = `${pctWalk - gap} 100`; }, 100);
   }
 
   // Radial chart hover details

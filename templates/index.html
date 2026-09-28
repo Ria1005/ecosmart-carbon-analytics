@@ -46,15 +46,15 @@
         <div class="ai-core">
           EcoSmart AI
         </div>
-        <a href="/transport" class="node node-1">
+        <a href="/transport" class="node node-1" aria-label="Open Transport">
           <span>Lifestyle Input</span>
           <strong>TRANSPORT</strong>
         </a>
-        <a href="/predict" class="node node-3">
+        <a href="/predict" class="node node-3" aria-label="Open Predict Yours">
           <span>Final Insight</span>
           <strong>CARBON FOOTPRINT</strong>
         </a>
-        <a href="/insights" class="node node-4">
+        <a href="/insights" class="node node-4" aria-label="Open AI Insights">
           <span>Analyzing patterns</span>
           <strong>AI MODEL</strong>
         </a>
@@ -79,6 +79,39 @@
     </div>
   </section>
 
+  <!-- KEY METRICS BANNER -->
+  <section class="section metrics-strip-section reveal" style="padding: 20px 0 40px;">
+    <div class="container" style="max-width: 1100px;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; background: rgba(13, 33, 27, 0.6); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 32px 24px; backdrop-filter: blur(10px);">
+        
+        <div style="text-align: center;">
+          <div class="stat-number" data-target="0.59" data-decimals="2" data-prefix="r = " style="font-family: var(--font-display); font-size: 2.8rem; color: var(--accent); line-height: 1;">0.00</div>
+          <div style="font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-top: 8px;">Distance vs. Emission</div>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px; opacity: 0.85;">Strongest correlation: vehicle distance driven (not transport mode)</p>
+        </div>
+
+        <div style="text-align: center;">
+          <div class="stat-number" data-target="10000" data-decimals="0" style="font-family: var(--font-display); font-size: 2.8rem; color: var(--accent-secondary); line-height: 1;">0</div>
+          <div style="font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-top: 8px;">Survey Records Analyzed</div>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px; opacity: 0.85;">Cleaned empirical dataset spanning 20 lifestyle dimensions</p>
+        </div>
+
+        <div style="text-align: center;">
+          <div class="stat-number" data-target="0.844" data-decimals="3" data-prefix="R² = " style="font-family: var(--font-display); font-size: 2.8rem; color: var(--accent); line-height: 1;">0.000</div>
+          <div style="font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-top: 8px;">Model Accuracy</div>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px; opacity: 0.85;">Random Forest regression with 10 feature inputs</p>
+        </div>
+
+        <div style="text-align: center;">
+          <div class="stat-number" data-target="211" data-decimals="0" style="font-family: var(--font-display); font-size: 2.8rem; color: var(--accent-secondary); line-height: 1;">0</div>
+          <div style="font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-top: 8px;">Global Countries Tracked</div>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px; opacity: 0.85;">Integrated Our World in Data time series (1990–2023)</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
   <!-- PROBLEM SECTION (THREE DIMENSIONS) -->
   <section class="section problem-section">
     <div class="container">
@@ -86,21 +119,24 @@
       <div class="problem-header reveal">
         <div class="eyebrow">The Problem</div>
         <h2>The numbers are there.<br>The patterns aren't obvious.</h2>
-        <p>EcoSmart explores survey data around transport, diet, recycling and related habits to understand which behaviors are associated with differences in carbon emissions.</p>
+        <p>EcoSmart explores survey data around transport, recycling and related habits to understand which behaviors are associated with differences in carbon emissions.</p>
       </div>
 
       <div class="dimensions-grid">
         <!-- TRANSPORT -->
         <a href="/transport" class="dim-card transport reveal delay-1">
           <div class="dim-visual vis-transport"></div>
+          <img src="{{ url_for('static', filename='transport_logo_1.png') }}" alt="Transport" class="transport-logo-img">
           <h3 class="dim-title">Transport</h3>
-          <p class="dim-desc">The most significant driver of personal emissions, strongly correlated with daily commute choices.</p>
+          <p class="dim-desc">The single greatest personal footprint factor — strongly driven by monthly vehicle distance (r = 0.59), vehicle powertrain, and air travel.</p>
         </a>
+
         
 
         <!-- RECYCLING -->
         <a href="/recycling" class="dim-card recycling reveal delay-3">
           <div class="dim-visual vis-recycling"></div>
+          <img src="{{ url_for('static', filename='recycling_logo.png') }}" alt="Recycling" class="recycling-logo-img">
           <h3 class="dim-title">Recycling</h3>
           <p class="dim-desc">How recycling breadth affects the average footprint.</p>
         </a>
@@ -145,41 +181,7 @@
     </div>
   </section>
 
-  <!-- PRODUCT PREVIEW -->
-  <section class="section preview-section reveal">
-    <div class="container" style="max-width: 900px;">
-      
-      <div class="preview-wrapper">
-        <div class="preview-dashboard">
-          
-          <div class="preview-header">
-            <div class="preview-title">EcoSmart Platform</div>
-            <div class="preview-tabs">
-              <a href="/transport" class="ptab active">Transport</a>
-              <a href="/recycling" class="ptab">Recycling</a>
-            </div>
-          </div>
-          
-          <div class="preview-main">
-            <!-- Abstract Dashboard Chart representation -->
-            <div class="faux-chart">
-              <div class="faux-bar fb-1"></div>
-              <div class="faux-bar fb-2"></div>
-              <div class="faux-bar fb-3"></div>
-              <div class="faux-bar fb-4"></div>
-              <div class="faux-bar fb-5"></div>
-            </div>
-          </div>
-          
-          <div style="color: var(--text-muted); font-size: 14px; text-align: center;">
-            Interactive Carbon Footprint Visualization
-          </div>
-          
-        </div>
-      </div>
-      
-    </div>
-  </section>
+
 
   <!-- FINAL CTA -->
   <section class="section cta-section reveal">

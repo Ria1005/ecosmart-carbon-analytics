@@ -733,3 +733,237 @@ a {
     height: 100%;
   }
 }
+
+/* ===================================================
+   DRILLDOWN, AIR TRAVEL & GLOBAL EXPLORER STYLES
+   =================================================== */
+
+.drilldown-container {
+  background: rgba(13, 33, 27, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 32px;
+  backdrop-filter: blur(12px);
+  margin-top: 32px;
+}
+
+.drilldown-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.breadcrumb-step {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.breadcrumb-step:hover {
+  background: rgba(143, 174, 134, 0.15);
+  color: var(--text-main);
+  border-color: var(--accent);
+}
+
+.breadcrumb-step.active {
+  background: var(--accent);
+  color: #071612;
+  font-weight: 600;
+  border-color: var(--accent);
+}
+
+.breadcrumb-arrow {
+  color: var(--text-muted);
+  opacity: 0.5;
+  font-size: 14px;
+}
+
+.drill-items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.drill-card {
+  background: rgba(18, 42, 34, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.drill-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(143, 174, 134, 0.4);
+  background: rgba(18, 42, 34, 0.9);
+}
+
+.drill-card.highlight {
+  border-color: var(--accent-secondary);
+}
+
+.drill-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+
+.drill-card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-main);
+  text-transform: capitalize;
+}
+
+.drill-card-val {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--accent-secondary);
+}
+
+.drill-card-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.drill-bar-wrap {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.drill-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: var(--accent);
+  transition: width 0.8s ease;
+}
+
+/* Air travel section */
+.air-travel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.air-card {
+  background: rgba(13, 33, 27, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  position: relative;
+}
+
+.air-freq-name {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.air-val {
+  font-family: var(--font-display);
+  font-size: 30px;
+  color: var(--accent-secondary);
+  line-height: 1.1;
+  margin: 6px 0;
+}
+
+.air-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  padding: 3px 8px;
+  border-radius: 12px;
+  background: rgba(217, 179, 105, 0.15);
+  color: var(--accent-secondary);
+  margin-top: 6px;
+}
+
+/* Region / Country Explorer */
+.explorer-controls {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.explorer-select-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-width: 200px;
+}
+
+.explorer-select-group label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.explorer-select {
+  padding: 10px 14px;
+  background: rgba(18, 42, 34, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  color: var(--text-main);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.explorer-select:focus {
+  border-color: var(--accent);
+}
+
+.explorer-stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.exp-stat-box {
+  background: rgba(18, 42, 34, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.exp-stat-num {
+  font-family: var(--font-display);
+  font-size: 26px;
+  color: var(--accent);
+}
+
+.exp-stat-lbl {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-top: 4px;
+}

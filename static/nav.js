@@ -5,7 +5,6 @@ function renderSidebar(active){
     ]},
     { grp: 'Explore the data', links: [
       { href:'/transport', key:'transport', label:'🚗 Transport' },
-      { href:'/diet', key:'diet', label:'🥗 Diet' },
       { href:'/recycling', key:'recycling', label:'♻️ Recycling' },
     ]},
     { grp: 'Model', links: [
@@ -30,7 +29,7 @@ function renderSidebar(active){
   });
   html += `</nav>
     <div class="sidebar-foot">
-      Built from survey data on transport, diet, recycling &amp; energy habits.
+      Built from survey data on transport, recycling &amp; energy habits.
     </div>
   `;
 

@@ -1,71 +1,375 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Insights — EcoSmart</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Insights — EcoSmart</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+  <style>
+    /* Specific styles for Insights page */
+    .insights-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 60px;
+    }
+    
+    .insight-card {
+      background: var(--elevated);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    
+    .metric-group {
+      display: flex;
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .metric {
+      flex: 1;
+    }
+    
+    .metric-val {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      color: var(--accent);
+      margin-bottom: 4px;
+      line-height: 1;
+    }
+    
+    .metric-lbl {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* Horizontal Bar Chart for Feature Importance */
+    .bar-wrap {
+      margin-top: 16px;
+    }
+    .bar-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+      gap: 16px;
+    }
+    .bar-label {
+      width: 220px;
+      font-size: 13px;
+      color: var(--text-muted);
+      text-align: right;
+    }
+    .bar-track {
+      flex: 1;
+      height: 8px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+    }
+    .bar-fill {
+      position: absolute;
+      top: 0; left: 0; bottom: 0;
+      background: var(--accent);
+      border-radius: 4px;
+      width: 0; /* Animated by JS */
+      transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .bar-val {
+      width: 50px;
+      font-family: var(--font-display);
+      font-size: 14px;
+      color: var(--accent-secondary);
+    }
+
+    /* Pipeline Flow */
+    .pipeline-v {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-width: 600px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .pipeline-v::before {
+      content: '';
+      position: absolute;
+      left: 50%; top: 0; bottom: 0;
+      width: 2px;
+      background: rgba(143, 174, 134, 0.15);
+      transform: translateX(-50%);
+    }
+    .p-step {
+      background: var(--bg-panel-2);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 24px;
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      backdrop-filter: blur(10px);
+    }
+    .p-step-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--moss);
+      margin-bottom: 8px;
+    }
+    .p-step-val {
+      font-size: 16px;
+      color: var(--text-main);
+    }
+
+    @media (max-width: 768px) {
+      .insights-grid { grid-template-columns: 1fr; }
+      .bar-row { flex-direction: column; align-items: flex-start; gap: 6px; }
+      .bar-label { width: 100%; text-align: left; }
+      .bar-track { width: 100%; }
+    }
+  </style>
 </head>
 <body>
-<div class="shell">
-  <aside class="sidebar" id="sidebar-slot"></aside>
 
-  <main>
-    <div class="page-kicker">MODEL — WHAT THE AI LEARNED</div>
-    <h1 class="page-title">Not just a black box.</h1>
-    <p class="page-lede">The prediction model was trained on the survey data. This page shows how accurate it is, and which habits it leaned on most to make its predictions.</p>
+  <!-- FLOATING NAVIGATION -->
+  <nav class="nav-wrapper">
+    <div class="brand">Eco<span>Smart</span></div>
+    <div class="nav-links">
+      <a href="/" class="nav-link">Home & Problem</a>
+      <a href="/transport" class="nav-link">Transport</a>
+      <a href="/recycling" class="nav-link">Recycling</a>
+      <a href="/insights" class="nav-link active">AI Insights</a>
+      <a href="/predict" class="nav-link">Predict Yours</a>
+      <a href="/about" class="nav-link">About</a>
+    </div>
+  </nav>
 
-    <div class="stat-line" id="metricRow"></div>
-
-    <div class="panel" style="margin-top:30px;">
-      <div class="chart-wrap"><canvas id="importanceChart"></canvas></div>
-      <div class="side-detail" id="detailBox">
-        <h3>How to read this</h3>
-        <p>Each bar is how much weight the model placed on that factor when predicting
-        someone's carbon emission. Longer bar = bigger influence on the prediction.</p>
-        <div id="fallbackSlot"></div>
+  <!-- HERO SECTION -->
+  <section class="section hero-section">
+    <div class="container hero-grid" style="grid-template-columns: 1fr; text-align: center;">
+      <div class="hero-content reveal">
+        <div class="eyebrow">MODEL / AI INSIGHTS</div>
+        <h1 class="hero-title" style="margin: 0 auto; max-width: 800px;">
+          What the data reveals.
+        </h1>
+        <p class="editorial-text delay-1" style="margin: 20px auto 0; font-size: 1.25rem;">
+          Exploring the empirical relationships between 10 lifestyle features and their total carbon impact.
+        </p>
       </div>
     </div>
-  </main>
-</div>
+    <div class="scroll-indicator">
+      <div class="scroll-line"></div>
+    </div>
+  </section>
 
-<script src="{{ url_for('static', filename='nav.js') }}"></script>
-<script src="{{ url_for('static', filename='data.js') }}"></script>
-<script>
-renderSidebar('insights');
+  <!-- DATASET OVERVIEW -->
+  <section class="section">
+    <div class="container">
+      <div class="eyebrow reveal">DATASET OVERVIEW</div>
+      <div class="insights-grid">
+        <div class="insight-card reveal delay-1 tilt-card">
+          <h3 class="editorial-title" style="font-size: 1.5rem;">Empirical Records</h3>
+          <p class="editorial-text" style="font-size: 15px; margin-top: 10px;">
+            The model was trained on a cleaned dataset spanning 20 total dimensions. We extracted the 10 most actionable features to build the regression model.
+          </p>
+          <div class="metric-group">
+            <div class="metric">
+              <div class="metric-val">10,000</div>
+              <div class="metric-lbl">Total Records</div>
+            </div>
+            <div class="metric">
+              <div class="metric-val">10</div>
+              <div class="metric-lbl">Features Used</div>
+            </div>
+          </div>
+        </div>
 
-document.addEventListener('ecosmart-data-ready', () => {
-  const d = window.EcoSmart.data;
-  const m = d.model_metrics || {};
+        <div class="insight-card reveal delay-2 tilt-card">
+          <h3 class="editorial-title" style="font-size: 1.5rem;">Target Variable</h3>
+          <p class="editorial-text" style="font-size: 15px; margin-top: 10px;">
+            The model targets a single continuous variable: Annual Carbon Emission.
+          </p>
+          <div style="margin-top: 30px; padding: 20px; background: rgba(0,0,0,0.2); border-radius: 10px; border: 1px solid rgba(255,255,255,0.05);">
+            <div style="font-family: var(--font-display); font-size: 20px; color: var(--text-main);">CarbonEmission</div>
+            <div style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">Unit: kg CO₂e / year</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  document.getElementById('metricRow').innerHTML = `
-    <div><div class="num">${m.r2 ?? '\u2014'}</div><div class="lbl">R\u00b2 (accuracy)</div></div>
-    <div><div class="num">${m.rmse ?? '\u2014'}</div><div class="lbl">RMSE</div></div>
-    <div><div class="num">${m.mae ?? '\u2014'}</div><div class="lbl">MAE</div></div>
-  `;
+  <!-- ACTUAL DATA INSIGHTS -->
+  <section class="section">
+    <div class="container">
+      <div class="eyebrow reveal">KEY FINDINGS</div>
+      <h2 class="editorial-title reveal delay-1">Transport dominates.</h2>
+      
+      <div class="insights-grid" style="margin-top: 40px;">
+        <div class="insight-card reveal delay-2 tilt-card">
+          <div style="font-size: 11px; color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px;">Transport Modes</div>
+          <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 24px;">Average baseline footprint purely based on primary transport choice.</p>
+          
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
+              <span style="color: var(--text-main);">Private Vehicle</span>
+              <span style="font-family: var(--font-display); color: var(--accent-secondary);">2980.9</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
+              <span style="color: var(--text-main);">Public Transit</span>
+              <span style="font-family: var(--font-display); color: var(--accent-secondary);">1965.8</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
+              <span style="color: var(--text-main);">Walk / Bicycle</span>
+              <span style="font-family: var(--font-display); color: var(--accent-secondary);">1879.7</span>
+            </div>
+          </div>
+        </div>
 
-  const entries = Object.entries(d.feature_importance || {}).sort((a,b)=>b[1]-a[1]).slice(0,8);
-  const labels = entries.map(e=>e[0]);
-  const values = entries.map(e=>e[1]);
+        <div class="insight-card reveal delay-3 tilt-card">
+          <div style="font-size: 11px; color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px;">Air Travel Impact</div>
+          <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 24px;">The severe multiplier effect of flight frequency.</p>
+          
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
+              <span style="color: var(--text-main);">Never</span>
+              <span style="font-family: var(--font-display); color: var(--accent-secondary);">1716.3</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
+              <span style="color: var(--text-main);">Rarely</span>
+              <span style="font-family: var(--font-display); color: var(--accent-secondary);">1945.9</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
+              <span style="color: var(--text-main);">Frequently</span>
+              <span style="font-family: var(--font-display); color: var(--accent-secondary);">2362.9</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
+              <span style="color: var(--text-main);">Very Frequently</span>
+              <span style="font-family: var(--font-display); color: var(--accent-secondary);">3026.5</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  const ctx = document.getElementById('importanceChart').getContext('2d');
-  new Chart(ctx, {
-    type: 'bar',
-    data: { labels, datasets:[{ data: values, backgroundColor: window.EcoSmart.palette }] },
-    options: {
-      indexAxis:'y',
-      plugins:{ legend:{ display:false } },
-      scales: {
-        x:{ ticks:{ color:'#9FB0A5' }, grid:{ color:'rgba(237,234,224,0.06)' } },
-        y:{ ticks:{ color:'#9FB0A5' }, grid:{ color:'rgba(237,234,224,0.06)' } }
-      },
-      maintainAspectRatio:false
-    }
-  });
+  <!-- MODEL PERFORMANCE & IMPORTANCE -->
+  <section class="section">
+    <div class="container">
+      <div class="eyebrow reveal">MACHINE LEARNING</div>
+      <h2 class="editorial-title reveal delay-1">Random Forest Regressor</h2>
+      
+      <div class="insight-card reveal delay-2 tilt-card" style="margin-top: 40px; padding: 40px 60px;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px; flex-wrap: wrap; gap: 20px;">
+          <div>
+            <h3 style="font-size: 20px; color: var(--text-main); margin-bottom: 8px;">Model Metrics</h3>
+            <p style="font-size: 14px; color: var(--text-muted);">Tested via 80/20 train-test split.</p>
+          </div>
+          <div style="display: flex; gap: 40px;">
+            <div>
+              <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">R² Score</div>
+              <div style="font-family: var(--font-display); font-size: 32px; color: var(--accent);">0.844</div>
+            </div>
+            <div>
+              <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">RMSE</div>
+              <div style="font-family: var(--font-display); font-size: 32px; color: var(--accent-secondary);">402.9</div>
+            </div>
+            <div>
+              <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">MAE</div>
+              <div style="font-family: var(--font-display); font-size: 32px; color: var(--accent-secondary);">315.4</div>
+            </div>
+          </div>
+        </div>
 
-  document.getElementById('fallbackSlot').innerHTML = window.EcoSmart.fallbackNote();
-});
-</script>
+        <h3 style="font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 24px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 40px;">Feature Importance</h3>
+        
+        <div class="bar-wrap" id="featureBars">
+          <!-- Handled by JS -->
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- TECHNICAL PIPELINE -->
+  <section class="section" style="padding-bottom: 120px;">
+    <div class="container">
+      <div class="eyebrow reveal" style="text-align: center;">HOW PREDICTION WORKS</div>
+      
+      <div class="pipeline-v reveal delay-1" style="margin-top: 60px;">
+        <div class="p-step">
+          <div class="p-step-title">INPUT</div>
+          <div class="p-step-val">10 Lifestyle Form Features</div>
+        </div>
+        <div class="p-step">
+          <div class="p-step-title">PREPROCESSING</div>
+          <div class="p-step-val">One-Hot Encoding (pd.get_dummies)</div>
+        </div>
+        <div class="p-step">
+          <div class="p-step-title">MODEL</div>
+          <div class="p-step-val">Trained RandomForestRegressor (100 Trees)</div>
+        </div>
+        <div class="p-step" style="border-color: var(--accent);">
+          <div class="p-step-title" style="color: var(--accent);">PREDICTION</div>
+          <div class="p-step-val" style="font-family: var(--font-display); font-size: 20px; color: var(--accent);">Estimated CarbonEmission</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <script src="{{ url_for('static', filename='home.js') }}"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Data exact from dashboard_data.json
+      const importanceData = [
+        { label: "Vehicle Monthly Distance", val: 0.4032 },
+        { label: "Frequency of Air Travel", val: 0.2317 },
+        { label: "Vehicle Type", val: 0.1727 },
+        { label: "New Clothes Monthly", val: 0.0680 },
+        { label: "Monthly Grocery Bill", val: 0.0359 },
+        { label: "Waste Bag Weekly Count", val: 0.0348 },
+        { label: "Heating Energy Source", val: 0.0250 },
+        { label: "Recycling Count", val: 0.0184 },
+        { label: "Energy Efficiency", val: 0.0079 },
+        { label: "Transport Mode", val: 0.0025 }
+      ];
+
+      const barWrap = document.getElementById('featureBars');
+      importanceData.forEach(item => {
+        const pct = (item.val * 100).toFixed(1);
+        const row = document.createElement('div');
+        row.className = 'bar-row';
+        row.innerHTML = `
+          <div class="bar-label">${item.label}</div>
+          <div class="bar-track">
+            <div class="bar-fill" data-width="${pct}%"></div>
+          </div>
+          <div class="bar-val">${pct}%</div>
+        `;
+        barWrap.appendChild(row);
+      });
+
+      // Animate bars on scroll
+      const barObserver = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const fills = entry.target.querySelectorAll('.bar-fill');
+            fills.forEach((fill, idx) => {
+              setTimeout(() => {
+                fill.style.width = fill.getAttribute('data-width');
+              }, idx * 100);
+            });
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.2 });
+
+      barObserver.observe(barWrap);
+    });
+  </script>
 </body>
 </html>

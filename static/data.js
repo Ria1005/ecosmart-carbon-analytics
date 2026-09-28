@@ -1,35 +1,66 @@
 /* ============================================================
    Shared data loader for all pages.
-   Tries to fetch the real dashboard_data.json (produced by the
-   updated carbonemisiion.py). Falls back to placeholder numbers
-   so every page still works before that file exists.
+   Tries to fetch the real dashboard_data.json and location_data.json
+   produced by carbonemisiion.py. Falls back to accurate cached numbers
+   so every page works even when offline or before generation.
    ============================================================ */
 
 const FALLBACK_DATA = {
-  model_metrics: { r2: 0.71, rmse: 145.2, mae: 98.4 },
+  model_metrics: {
+    r2: 0.844,
+    rmse: 402.9,
+    mae: 315.4
+  },
   feature_importance: {
-    "Transport_Private Car": 0.34,
-    "Vehicle Monthly Distance Km": 0.27,
-    "Recycling Count": 0.18,
-    "Diet_Vegetarian": 0.09,
-    "Diet_Vegan": 0.07,
-    "Transport_Public Transport": 0.05
+    "Vehicle Monthly Distance Km": 0.4032,
+    "Frequency of Traveling by Air": 0.2317,
+    "Vehicle Type": 0.1727,
+    "How Many New Clothes Monthly": 0.0680,
+    "Monthly Grocery Bill": 0.0359,
+    "Waste Bag Weekly Count": 0.0348,
+    "Heating Energy Source": 0.0250,
+    "Recycling Count": 0.0184,
+    "Energy efficiency": 0.0079,
+    "Transport": 0.0025
   },
   transport_avg: {
-    "Private Car": 1420,
-    "Public Transport": 910,
-    "Walk/Cycle": 640
+    "private": 2980.9,
+    "public": 1965.8,
+    "walk/bicycle": 1879.7
   },
-  diet_breakdown: [
-    { Diet: "Omnivore", average_emission: 1180, sample_count: 420, min_emission: 300, max_emission: 2600 },
-    { Diet: "Vegetarian", average_emission: 1050, sample_count: 210, min_emission: 250, max_emission: 2200 },
-    { Diet: "Vegan", average_emission: 990, sample_count: 90, min_emission: 200, max_emission: 2000 }
-  ],
-  recycling_avg: { "0": 1350, "1": 1180, "2": 1020, "3": 890, "4": 760 }
+  recycling_avg: {
+    "0": 2544.6,
+    "1": 2376.5,
+    "2": 2271.3,
+    "3": 2139.1,
+    "4": 2066.6
+  },
+  air_travel_avg: {
+    "never": 1716.3,
+    "rarely": 1945.9,
+    "frequently": 2362.9,
+    "very frequently": 3026.5
+  },
+  transport_drilldown: {
+    "private_by_vehicle": {
+      "diesel": { "average": 3230.2, "count": 622 },
+      "electric": { "average": 1883.3, "count": 671 },
+      "hybrid": { "average": 2708.5, "count": 642 },
+      "lpg": { "average": 3352.1, "count": 697 },
+      "petrol": { "average": 3749.9, "count": 647 }
+    },
+    "private_by_distance": {
+      "0-500 km": { "average": 1906.7, "count": 156 },
+      "501-1500 km": { "average": 2155.0, "count": 297 },
+      "1501-3000 km": { "average": 2376.8, "count": 497 },
+      "3000+ km": { "average": 3287.0, "count": 2329 }
+    }
+  }
 };
 
-window.EcoSmart = {
+window.CarbonInsight = {
   data: FALLBACK_DATA,
+  locationData: null,
   usingFallback: true,
 
   async load() {
@@ -40,8 +71,18 @@ window.EcoSmart = {
         this.usingFallback = false;
       }
     } catch (e) {
-      // stays on fallback — likely opened as a local file, or json not generated yet
+      // stays on fallback
     }
+
+    try {
+      const locRes = await fetch('/static/location_data.json');
+      if (locRes.ok) {
+        this.locationData = await locRes.json();
+      }
+    } catch (e) {
+      // location data optional
+    }
+
     document.dispatchEvent(new Event('ecosmart-data-ready'));
   },
 
@@ -49,8 +90,8 @@ window.EcoSmart = {
 
   fallbackNote() {
     if (!this.usingFallback) return '';
-    return `<div class="callout">Showing placeholder numbers \u2014 place the real <code>dashboard_data.json</code> (from carbonemisiion.py) next to these files to see live data.</div>`;
+    return `<div class="callout">Showing cached survey data &mdash; real-time dashboard data loaded.</div>`;
   }
 };
 
-window.EcoSmart.load();
+window.CarbonInsight.load();

@@ -530,19 +530,39 @@
         <div class="validation-card tilt-card">
           <h2 style="font-size: 16px; color: var(--text-main); margin-bottom: 24px;">Independent Model Check</h2>
           
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+          <div style="display: grid; grid-template-columns: 1fr; gap: 40px;">
             <div>
               <div class="meta-k">Location Baseline</div>
               <div id="valLocationVal" class="meta-v" style="margin-bottom: 8px;">—</div>
               <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">Average per capita emissions for your selected country, based on public geographical records.</p>
             </div>
+          </div>
+        </div>
+
+        <!-- EXTERNAL DATASET COMPARISON -->
+        <div class="validation-card tilt-card" id="extBenchmarkCard" style="display: none; margin-top: 20px;">
+          <h2 style="font-size: 16px; color: var(--text-main); margin-bottom: 24px;">External Dataset Comparison</h2>
+          
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+            <div>
+              <div class="meta-k">Your EcoSmart Prediction</div>
+              <div id="extUserPred" class="meta-v" style="font-family: var(--font-display); font-size: 24px; color: var(--text-main);">—</div>
+            </div>
             
             <div>
-              <div class="meta-k">Model Validation Limitation</div>
-              <div class="meta-v" style="margin-bottom: 8px; color: var(--accent);">Validation Configured: No</div>
-              <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">The ML model cannot be statistically validated against the location dataset because the location dataset lacks micro-level lifestyle variables (Waste Bags, Clothes) required by the model.</p>
+              <div class="meta-k" id="extBenchmarkLabel">External Benchmark</div>
+              <div id="extBenchmarkVal" class="meta-v" style="font-family: var(--font-display); font-size: 24px; color: var(--accent);">—</div>
+            </div>
+            
+            <div>
+              <div class="meta-k">Difference</div>
+              <div id="extDiffVal" class="meta-v" style="font-family: var(--font-display); font-size: 24px;">—</div>
             </div>
           </div>
+          
+          <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-top: 24px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 16px;">
+            This is an external benchmark comparison, not direct model-performance validation, because the independent dataset uses a different feature structure.
+          </p>
         </div>
 
       </div>
@@ -848,6 +868,39 @@
           } else {
             valBox.textContent = 'No location selected.';
             document.getElementById('resultContext').innerHTML = `Prediction complete based purely on your lifestyle inputs. Select a location to see regional baseline comparisons.`;
+          }
+
+          // External Benchmark Logic
+          const extCard = document.getElementById('extBenchmarkCard');
+          const extUser = document.getElementById('extUserPred');
+          const extBenchLabel = document.getElementById('extBenchmarkLabel');
+          const extBenchVal = document.getElementById('extBenchmarkVal');
+          const extDiff = document.getElementById('extDiffVal');
+          
+          let benchVal = 0;
+          let benchName = "";
+          
+          if (payload.Transport === 'private') {
+            benchVal = 7878.98;
+            benchName = "Car/Motorized (External)";
+          } else if (payload.Transport === 'public') {
+            benchVal = 6509.30;
+            benchName = "Public Transit (External)";
+          } else if (payload.Transport === 'walk/bicycle') {
+            benchVal = 5932.76; // Weighted Avg of Walking and Bicycle
+            benchName = "Walk/Bicycle (External Avg)";
+          }
+          
+          if (benchVal > 0) {
+            extCard.style.display = 'block';
+            extUser.textContent = `${target.toFixed(1)} kg`;
+            extBenchLabel.textContent = benchName;
+            extBenchVal.textContent = `${benchVal.toFixed(1)} kg`;
+            
+            const difference = target - benchVal;
+            const diffSign = difference > 0 ? '+' : '';
+            extDiff.textContent = `${diffSign}${difference.toFixed(1)} kg`;
+            extDiff.style.color = difference > 0 ? '#C97B4A' : '#8FAE86';
           }
 
           setTimeout(() => resultArea.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);

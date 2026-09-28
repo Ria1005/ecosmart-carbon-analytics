@@ -1,14 +1,23 @@
 --- EXTERNAL DATASET VALIDATION ---
 
-Average Total Carbon Footprint by Transport Mode (kg CO2e):
-lt_mode_name
-Car or other motorized vehicle    7878.98
-Public Transportation             6509.30
-Walking                           6115.49
-Bicycle                           5640.53
-Other                             5010.67
+Total valid responses analyzed: 7358
+
+Carbon Footprint by Transport Mode (kg CO2e):
+                                   mean   median  count
+lt_mode_name                                           
+Car or other motorized vehicle  7878.98  6842.99   3489
+Public Transportation           6509.30  5757.63    921
+Walking                         6115.49  5351.37   1788
+Bicycle                         5640.53  4947.66   1118
+Other                           5010.67  4161.07     42
+
+--- STATISTICAL TEST ---
+Test: Kruskal-Wallis H-test (non-parametric ANOVA)
+H-statistic: 578.3468
+p-value: 7.5206e-124
 
 CONCLUSION:
-The independent 1.5 Degree Lifestyles dataset shows differences in average total carbon footprint across transport modes. In this dataset, respondents whose most-used mode was car or another motorized vehicle had the highest average total footprint (7878.98 kg CO2e), while bicycle, walking, public transport, and other modes had lower averages. This provides external supporting evidence for examining transport as an important contributor to carbon footprint, consistent with the transport-related findings in EcoSmart. This is an external comparison, not a retraining or direct performance validation of the EcoSmart Random Forest model.
+The independent 1.5 Degree Lifestyles dataset shows differences in average and median total carbon footprint across transport modes. In this dataset, respondents whose most-used mode was car or another motorized vehicle had the highest average total footprint, while bicycle, walking, public transport, and other modes had lower averages. The Kruskal-Wallis test confirms that the distributions of carbon footprints across these transport modes are statistically significantly different. This provides external supporting evidence for examining transport as an important contributor to carbon footprint, consistent with the transport-related findings in EcoSmart.
 
+This is an external comparison, not a retraining or direct performance validation of the EcoSmart Random Forest model.
 Note: R2, MAE, and RMSE are NOT calculated here because the external dataset has a different feature schema.

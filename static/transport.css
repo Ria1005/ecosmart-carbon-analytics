@@ -726,6 +726,10 @@ a {
     font-size: 13px;
     padding: 8px 14px;
   }
+  .section.hero-section {
+    justify-content: flex-start;
+    padding-top: 130px;
+  }
   .hero-title { font-size: 2.5rem; }
 
   .comp-row {

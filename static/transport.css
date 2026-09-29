@@ -706,9 +706,27 @@ a {
 }
 
 @media (max-width: 768px) {
-  .nav-links {
-    display: none;
+  .nav-wrapper {
+    width: 95%;
+    padding: 10px 16px;
+    gap: 15px;
+    overflow-x: auto;
+    justify-content: flex-start;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
+  .nav-wrapper::-webkit-scrollbar { display: none; }
+  .brand { display: none; }
+  .nav-links {
+    display: flex !important;
+    gap: 10px;
+  }
+  .nav-link {
+    white-space: nowrap;
+    font-size: 13px;
+    padding: 8px 14px;
+  }
+  .hero-title { font-size: 2.5rem; }
 
   .comp-row {
     grid-template-columns: 1fr;
